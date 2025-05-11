@@ -35,6 +35,12 @@ def get_stats(player_id: str, db: Session = Depends(get_db)):
     return {"player_id": player_id, "wins": stats_service.get_wins(player_id)}
 
 
+@app.get("/stats/leader-board/{offset}")
+def get_leaderboard(offset: int, db: Session = Depends(get_db)):
+    stats_service = PlayerStatsService(db)
+    return stats_service.get_leaderboard(offset)
+
+
 @app.get("/lobbies")
 def list_open_lobbies():
     return game_service.get_open_lobbies()

@@ -1,5 +1,9 @@
+from sqlalchemy import desc
 from sqlalchemy.orm import Session
 from models import PlayerStats
+from typing import List
+
+LEADERBOARD_PAGING_LIMIT = 50
 
 
 class PlayerStatsService:
@@ -18,3 +22,11 @@ class PlayerStatsService:
     def get_wins(self, player_id: str) -> int:
         stats = self.db.query(PlayerStats).filter(PlayerStats.player_id == player_id).first()
         return stats.wins if stats else 0
+
+    def get_leaderboard(self, offset: int) -> List[PlayerStats]:
+        stats = self.db.query(PlayerStats)\
+            .order_by(desc(PlayerStats.wins))\
+            .offset(offset)\
+            .limit(LEADERBOARD_PAGING_LIMIT)\
+            .all()
+        return stats
