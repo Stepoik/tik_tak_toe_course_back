@@ -24,7 +24,7 @@ stats_service = PlayerStatsService(SessionLocal())
 game_service = GameService(stats_service)
 
 
-@app.post("/create_game")
+@app.post("/games")
 def create_game():
     return {"game_id": game_service.create_game()}
 
@@ -41,7 +41,7 @@ def get_leaderboard(offset: int, db: Session = Depends(get_db)):
     return stats_service.get_leaderboard(offset)
 
 
-@app.get("/lobbies")
+@app.get("/games")
 def list_open_lobbies():
     return game_service.get_open_lobbies()
 
